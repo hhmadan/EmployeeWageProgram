@@ -2,6 +2,9 @@
 //UC2_Get Daily Employee Wage
 //UC3_Add Part and Full-time Daily Employee Wage
 //UC4_Solve Using Switch Case
+//UC5_Calculate Wage For a Month
+//UC6_Condition For Reaching Limit Of Working Hours (100 Hrs.) OR Days(20 days) In a Month 
+//UC7_Create Class Methods to Compute Employee Wage
 
 #include<iostream>
 #include<cstdlib>
@@ -17,45 +20,56 @@ typedef struct empWage{
     int workingDaysInMonth;
 }emp;
 
-void getDailyWage(int *rnd){
-    emp e;
-    e.wagePerHr = 20;
-    e.fullDayHr = 8;
-    e.halfDayHr = 4;
-    e.fullDaySal = e.wagePerHr * e.fullDayHr;
-    e.halfDaySal = e.wagePerHr * e.halfDayHr;
-    int salaryPerDay = 0;
-    switch(*rnd){
-        case 0:
-            cout<<"Salary is $"<<salaryPerDay<<endl;
-            break;
-        case 1:
-            salaryPerDay = e.halfDaySal;
-            cout<<"Salary is $"<<salaryPerDay<<endl;
-            break;
-        case 2:
-            salaryPerDay = e.fullDaySal;
-            cout<<"Salary is $"<<salaryPerDay<<endl;
-            break;  
-        default:
-            break;          
-    }
-}
-
-void getAttendance(){
-    srand(time(0));
-    int rnd = (rand() % 3);
-    
-    if(rnd == 0)
-        cout<<"Employee is ABSENT\n";
-    else if(rnd == 1)
-        cout<<"Employee is Present for HALF Day\n";
-    else 
-        cout<<"Employee is Present for FULL Day\n";    
-    getDailyWage(&rnd);       
-}
+class EmployeeWage{
+    public:
+        void getMonthlyWage(){
+            emp e;
+            e.wagePerHr = 20;
+            e.fullDayHr = 8;
+            e.halfDayHr = 4;
+            e.fullDaySal = e.wagePerHr * e.fullDayHr;
+            e.halfDaySal = e.wagePerHr * e.halfDayHr;
+            int salPerDay = 0;
+            int salPerMonth = 0;
+            int workingHrs = 0;
+            int maxWorkingHrs = 0;
+            
+            srand(time(0));
+            for(int day = 1, workingHrs = 0; day <= 20
+                        && maxWorkingHrs <= 100; day++, maxWorkingHrs += workingHrs){
+                int rnd = (rand() % 3);
+                
+                switch(rnd){
+                    case 0:
+                        salPerDay = 0;
+                        workingHrs = 0;
+                        cout<<"DAY "<<day<<"==> Employee is ABSENT\n";
+                        cout<<"Salary is $"<<salPerDay<<endl;
+                        break;
+                    case 1:
+                        salPerDay = e.halfDaySal;
+                        workingHrs = e.halfDayHr;
+                        cout<<"DAY "<<day<<"==> Employee is Present for HALF Day\n";
+                        cout<<"Salary is $"<<salPerDay<<endl;
+                        break;
+                    case 2:
+                        salPerDay = e.fullDaySal;
+                        workingHrs = e.fullDayHr;
+                        cout<<"DAY "<<day<<"==> Employee is Present for FULL Day\n";
+                        cout<<"Salary is $"<<salPerDay<<endl;
+                        break;  
+                    default:
+                        break;          
+                }
+                cout<<endl;
+                salPerMonth += salPerDay;
+            }
+            cout<<"Employee Wage of a Month is: $"<<salPerMonth;    
+        }
+};
 
 int main(){
-    getAttendance();
+    EmployeeWage object;
+    object.getMonthlyWage();
     return 0;
 }
